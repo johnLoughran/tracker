@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Input, Button } from 'react-native-elements';
 import Spacer from '../components/Spacer';
+import { Context as AuthContext } from '../context/AuthContext';
 
 const SignupScreen = ( { navigation } ) => {
+  const { state, signup } = useContext( AuthContext );
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
+
+  console.log( state );
 
   // Could instead use onChangeText={ setEmail } belwo
   return(
@@ -31,8 +35,10 @@ const SignupScreen = ( { navigation } ) => {
         autoCorrect={false}
       />
       <Spacer>
+      { state.errorMessage ? <Text style={ styles.errMsg }>{ state.errorMessage }</Text> : null }
         <Button
           title="Sign Up"
+          onPress={ () => signup({ email, password }) }
         />
       </Spacer>
       <Button
@@ -59,6 +65,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginBottom: 30
+  },
+  errMsg: {
+    margin: 15,
+    fontSize: 16,
+    color: 'red'
   }
 });
 
