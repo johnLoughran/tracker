@@ -16,6 +16,7 @@ import TrackListScreen from './src/screens/TrackListScreen';
 import TrackDetailScreen from './src/screens/TrackDetailScreen';
 import TrackCreateScreen from './src/screens/TrackCreateScreen';
 import { Provider as AuthProvider } from './src/context/AuthContext';
+import { setNavigator } from './src/navigationRef';
 
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
@@ -36,10 +37,12 @@ const switchNavigator = createSwitchNavigator({
 // Now we wrap the navigation stuff inside the AuthProvider so first call it app
 const App = createAppContainer( switchNavigator );
 
+// navigation only gets defined at the end of this file when <App /> is written
+// use navigationRef.js in src to allow easy access to navigation for things that are not react components
 export default () => {
   return(
     <AuthProvider>
-      <App />
+      <App ref={ ( navigator ) => { setNavigator( navigator ) } }/>
     </AuthProvider>
   );
 };
